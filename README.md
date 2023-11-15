@@ -2,7 +2,7 @@
 
 Het modelleren van de verspreiding van fake-news in een graaf.
 
-## Installation
+## Installeren
 
 Om het project te runnen moet je eerst een [virtual environment](https://docs.python.org/3/tutorial/venv.html) maken. Dit doe je door in de project folder het volgende commando te runnen in je terminal.
 

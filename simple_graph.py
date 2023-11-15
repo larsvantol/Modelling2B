@@ -60,7 +60,7 @@ plt.show()
 
 # Get directory of this file
 dir_path = os.path.dirname(os.path.realpath(__file__))
-file = os.path.join(dir_path, "tmp", "simple_graph.gexf")
+file = os.path.join(dir_path, "tmp", "example", "simple_graph.gexf")
 
 # Write the graph to a file
 nx.write_gexf(Graph, file)

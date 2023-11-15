@@ -1,23 +1,49 @@
-# Modelling-2B
+# Modeling-2B: Fake News Spread in Graphs
 
-Het modelleren van de verspreiding van fake-news in een graaf.
+## Overview
 
-## Installeren
+This project models the spread of fake news in a graph using Python. The simulation is designed to analyze how fake news propagates through a network, offering insights into the dynamics of misinformation dissemination.
 
-Om het project te runnen moet je eerst een [virtual environment](https://docs.python.org/3/tutorial/venv.html) maken. Dit doe je door in de project folder het volgende commando te runnen in je terminal.
+## Installation
+
+To run the project, follow these steps:
+
+### 1. Create a Virtual Environment
+
+Use the following command to create a virtual environment named "venv" within your project folder:
 
 ```bash
 python -m venv venv
 ```
 
-Nadat dit gedaan is moet je de virual environment activeren. Dit doe je met de volgende regel:
+### 2. Activate the Virtual Environment
+
+Activate the virtual environment. Use one of the following commands based on your operating system:
+
+- On Windows:
+
+  ```bash
+  venv\Scripts\activate
+  ```
+
+- On Unix or MacOS:
+
+  ```bash
+  source venv/bin/activate
+  ```
+
+Your terminal prompt should now display `(venv)`.
+
+### 3. Install Dependencies
+
+Install the required packages specified in the `requirements.txt` file:
 
 ```bash
-venv\Scripts\activate
+pip install -r requirements.txt
 ```
 
-In je terminal zal nu `(venv)` voor staan. Het laatste wat je moet doen is de packages installeren. Dit doe je met de volgende regel:
+**note:** Remember to update your virtual environment whenever you add or remove dependencies. You can do this by running `pip freeze > requirements.txt` to update the `requirements.txt` file
 
-```bash
-python pip install requirements.txt
-```
+### 4. Explore the Graph Code
+
+Refer to the `simple_graph.py` file to understand how to create a graph. The underlying package (`networkx`) is an interface for Python for C/C++ code, providing increased performance for graph operations.

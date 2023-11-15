@@ -1,0 +1,4 @@
+{
+  // Turn off typechecking for python files
+  "python.analysis.typeCheckingMode": "off"
+}

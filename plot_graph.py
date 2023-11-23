@@ -3,7 +3,7 @@ from tkinter.filedialog import askopenfilename
 import matplotlib.pyplot as plt
 import networkx as nx
 
-from open_graph import open_adjacency_matrix
+from graph_utils.open_graph import open_adjacency_matrix
 
 # Define the adjacency matrix
 matrix = askopenfilename(

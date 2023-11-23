@@ -13,7 +13,7 @@ import numpy as np
 import numpy.typing as npt
 from tqdm import tqdm
 
-from open_graph import open_adjacency_matrix
+from graph_utils.open_graph import open_adjacency_matrix
 
 
 def save_plot_of_graph(

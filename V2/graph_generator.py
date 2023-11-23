@@ -13,7 +13,7 @@ from tkinter.filedialog import askopenfilename
 import numpy as np
 from model_classes import Account, Graph, News
 
-from open_graph import open_adjacency_matrix
+from graph_utils.open_graph import open_adjacency_matrix
 
 # Define the adjacency matrix
 adjacency_matrix_filename = askopenfilename(

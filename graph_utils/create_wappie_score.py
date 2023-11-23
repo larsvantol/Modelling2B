@@ -46,7 +46,7 @@ def read_num_of_nodes(graph: nx.Graph) -> int:
 if __name__ == "__main__":
     from tkinter.filedialog import askopenfilename, asksaveasfilename
 
-    from open_graph import open_adjacency_matrix
+    from graph_utils.open_graph import open_adjacency_matrix
 
     graph_filename = askopenfilename(
         filetypes=[("CSV", "*.csv")],

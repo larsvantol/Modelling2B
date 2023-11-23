@@ -4,15 +4,17 @@ Classes for the account and news objects.
 
 from __future__ import annotations
 
-from typing import Self
+from typing import Self, Any
 
 import numpy as np
 import numpy.typing as npt
 
+from tqdm import tqdm
 
 class News:
     def __init__(self) -> None:
         self.id: int = self.get_next_id()
+        self.reached_accounts: list[int] = []
 
     @classmethod
     def get_next_id(cls) -> int:
@@ -24,6 +26,7 @@ class News:
             cls._id_counter += 1
         return cls._id_counter
 
+NewsList = list[News]
 
 class Account:
     def __init__(self, wappie_score: float, connections: list[int]) -> None:
@@ -33,9 +36,15 @@ class Account:
 
         self.connections = [connection for connection in connections if connection != self.id]
 
-        self.received_news: list[News] = []
-        self.past_news: list[News] = []
-        self.sent_news: list[News] = []
+        self.received_news: NewsList = []
+        
+        self.past_news: NewsList = []
+        self.sent_news: NewsList = []
+
+    def set_data_collector(self, data_collector: DataCollector) -> None:
+        """Set the data collector."""
+
+        self.data_collector = data_collector
 
     def degree(self) -> int:
         """Return the degree of the account."""
@@ -69,7 +78,7 @@ class Account:
         num_fake_news_messages = max(
             int(self.wappie_score * self.degree()), 0
         )  # max to prevent negative numbers
-        # Send fake to random neighbors
+        # Send fake news to random neighbors
         fake_news_neighbors = np.random.choice(
             list(self.connections),
             size=int(num_fake_news_messages),
@@ -106,18 +115,38 @@ class Graph:
             for connection_id in node.connections:
                 adjacency_matrix[id, connection_id] = 1
         return adjacency_matrix
+    
+    def set_data_collector(self, data_collector: DataCollector) -> None:
+        """Set the data collector."""
 
-    @classmethod
-    def generate_from_adjecency_and_scores(
-        cls, adjecency_matrix: npt.NDArray[np.bool_], wappie_scores: npt.NDArray[np.float_]
-    ) -> Self:
-        """Generate the graph from an adjecency matrix and wappie scores."""
+        self.data_collector = data_collector
 
-        # Create the nodes
-        accounts = {}
-        for i in range(len(adjecency_matrix)):
-            connections = [id for id, connection in enumerate(adjecency_matrix[i]) if connection]
-            accounts[i] = Account(wappie_score=wappie_scores[i], connections=connections)
+        for node in self.nodes.values():
+            node.set_data_collector(data_collector)
 
-        # Create the graph
-        return Graph(accounts)
+    
+    def __str__(self) -> str:
+        return f"Graph with {self.num_nodes} nodes."
+
+def generate_graph_from_adjecency_and_scores(
+    adjecency_matrix: npt.NDArray[np.bool_], wappie_scores: npt.NDArray[np.float_]
+) -> Graph:
+    """Generate a graph from an adjecency matrix and wappie scores."""
+
+    # Create the nodes
+    accounts = {}
+    for i in range(len(adjecency_matrix)):
+        connections = [id for id, connection in enumerate(adjecency_matrix[i]) if connection]
+        accounts[i] = Account(wappie_score=wappie_scores[i], connections=connections)
+
+    # Create the graph
+    return Graph(accounts)
+
+class DataCollector:
+    def __init__(self, location: str):
+        self.location = location
+
+    def collect(self, data: Any) -> None:
+        """Can be called at each time step to collect data."""
+
+        print(data)

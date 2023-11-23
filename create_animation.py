@@ -5,7 +5,6 @@ from tkinter.filedialog import askdirectory, asksaveasfilename
 import cv2
 from tqdm import tqdm
 
-# TODO
 image_folder = askdirectory(title="Open folder with images")
 video_name = asksaveasfilename(
     defaultextension=".avi",

@@ -21,6 +21,7 @@ height, width, layers = frame.shape
 video = cv2.VideoWriter(filename=video_name, fourcc=0, fps=1, frameSize=(width, height))
 
 for image in images:
+    print(image)
     video.write(cv2.imread(os.path.join(image_folder, image)))
 
 cv2.destroyAllWindows()

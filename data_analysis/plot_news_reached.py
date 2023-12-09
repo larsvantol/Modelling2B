@@ -3,7 +3,7 @@ import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from tkinter.filedialog import askopenfilename
+from tkinter.filedialog import askopenfilename, asksaveasfilename
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -21,7 +21,7 @@ import numpy as np
 # 0,0,82
 
 
-def main():
+def plot_news_reached(filename: str or None = None):
     # Ask for the data file
     news_reached_filename = askopenfilename(
         filetypes=[("CSV", "*.csv")],
@@ -64,8 +64,23 @@ def main():
     plt.xlabel("Time")
     plt.ylabel("Accounts reached")
     plt.legend()
-    plt.show()
+    if filename:
+        plt.savefig(
+            filename,
+            dpi=300,
+            format="png",
+            bbox_inches="tight",
+            transparent=False,
+        )
+    else:
+        plt.show()
 
 
 if __name__ == "__main__":
-    main()
+    graph_filename = asksaveasfilename(
+        filetypes=[("PNG", "*.png")],
+        title="Save graph",
+        defaultextension=".png",
+        initialfile="news_reached_graph.png",
+    )
+    plot_news_reached(filename=graph_filename)

@@ -26,6 +26,3 @@ for image in images:
 
 cv2.destroyAllWindows()
 video.release()
-
-# Open the video in VLC
-os.system(f"vlc {video_name}")

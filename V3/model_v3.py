@@ -39,7 +39,7 @@ graph = generate_graph_from_adjecency_and_scores(adjacency_matrix, scores)
 
 # Set the data collector
 location = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "tmp", "V2", "data"
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "tmp", "V3", "data"
 )
 data_collector = DataCollector(location=location)
 
@@ -63,17 +63,17 @@ with data_collector as data_collector:
 
     # Plot the graph
     print("Plotting graph")
-    # graph.plot()
-    data_collector.time = 1
+    print(f"Day {data_collector.time}")
+    graph.plot()
 
     # Iterate over the days
     print("Iterating over the days")
     for day in tqdm(range(1, days + 1)):
-        # graph.plot()
         data_collector.time = day
         # Iterate over the accounts
         for id, account in graph.nodes.items():
             # Update the account
             account.use(graph.nodes)
-    # graph.plot()
+        print(f"Day {data_collector.time}")
+        graph.plot()
     fake_news.add_empty_row()

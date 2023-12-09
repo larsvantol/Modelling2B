@@ -70,6 +70,17 @@ class Account:
 
         return len(self.connections)
 
+    def believes(self, news: News, source: Account) -> bool:
+        """
+        Returns if the account believes the fake news
+        """
+        beta = -1
+        while beta < 0:
+            beta = abs(np.random.normal(0.1, 0.075))
+
+        # The account believes news comming from a source with a similar wappie score  own score +- beta
+        return abs(self.wappie_score - source.wappie_score) <= beta
+
     @classmethod
     def get_next_id(cls):
         """Return the next available ID."""
@@ -91,18 +102,15 @@ class Account:
 
         self.received_news.append(news)
 
-    def whom_to_send_news(self, news: News) -> npt.NDArray[np.int_]:
+    def whom_to_send_news(self, news: News, nodes: dict[int, Account]) -> npt.NDArray[np.int_]:
         """Decide whether to use the news or not, based on the wappie score."""
 
-        num_fake_news_messages = max(
-            int(self.wappie_score * self.degree()), 0
-        )  # max to prevent negative numbers
-        # Send fake news to random neighbors
-        fake_news_neighbors = np.random.choice(
-            list(self.connections),
-            size=int(num_fake_news_messages),
-            replace=False,
-        )
+        # Check whether the account believes the news
+        if not self.believes(news, nodes[news.reached_accounts[-1]]):
+            return np.array([], dtype=int)
+        # So the account believes the news and will send it to its neighbors
+
+        fake_news_neighbors = np.array([connection for connection in self.connections], dtype=int)
 
         return fake_news_neighbors
 
@@ -119,7 +127,7 @@ class Account:
                 # Add the news to the news that the account has seen
                 self.past_news.append(received_news)
                 # Decide whether to send the news to its neighbors
-                send_list = self.whom_to_send_news(received_news)
+                send_list = self.whom_to_send_news(news=received_news, nodes=nodes)
                 # Send the news to the neighbors
                 for id in send_list:
                     self.send_news(received_news, nodes[id])
@@ -164,7 +172,7 @@ class Graph:
         # Save the graph
         self.save_plot_of_graph(
             G,
-            f"{self.data_collector.location}/graph_{self.data_collector.time}.png",
+            os.path.join(self.data_collector.location, f"graph_{self.data_collector.time}.png"),
         )
 
     def save_plot_of_graph(
@@ -202,6 +210,8 @@ class Graph:
         plt.tight_layout()
         plt.colorbar(pathcollection)
         plt.title("Networkx Graph")
+        # Check if the folder exists otherwise create one
+        pathlib.Path(os.path.dirname(output_file)).mkdir(parents=True, exist_ok=True)
         plt.savefig(output_file)
         plt.close()
 

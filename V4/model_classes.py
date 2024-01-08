@@ -66,6 +66,8 @@ class Account:
 
         self.received_news: list[(Self, News)] = []
 
+        self.sigma = 0
+
         self.past_news: NewsList = []
         self.sent_news: NewsList = []
 
@@ -99,7 +101,7 @@ class Account:
         """
         Returns if the account believes the fake news
         """
-        sigma = 0.5
+        sigma = self.sigma
         alpha = np.clip(abs(np.random.normal(abs(self.wappie_score), sigma)), 0, 1)
 
         # The account believes news comming from a source with a similar wappie score  own score +- beta

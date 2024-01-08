@@ -74,15 +74,16 @@ if __name__ == "__main__":
 
     from graph_utils.open_graph import open_adjacency_matrix
 
-    graph_filename = askopenfilename(
-        filetypes=[("CSV", "*.csv")],
-        title="Open graph",
-    )
-    adjacency_matrix = open_adjacency_matrix(graph_filename)
-    graph = nx.from_numpy_array(adjacency_matrix)
-    num_nodes = read_num_of_nodes(graph)
+    # graph_filename = askopenfilename(
+    #     filetypes=[("CSV", "*.csv")],
+    #     title="Open graph",
+    # )
+    # adjacency_matrix = open_adjacency_matrix(graph_filename)
+    # graph = nx.from_numpy_array(adjacency_matrix)
+    # num_nodes = read_num_of_nodes(graph)
+    num_nodes = 40000
     # wappie_scores = create_random_positive_clipped_wappie_scores(num_nodes, 0, 0.5)
-    wappie_scores = create_random_positive_clipped_wappie_scores(num_nodes, 0, 0.3)
+    wappie_scores = create_random_positive_clipped_wappie_scores(num_nodes, 0, 0.5)
     file = asksaveasfilename(
         defaultextension=".csv",
         filetypes=[("CSV", "*.csv")],

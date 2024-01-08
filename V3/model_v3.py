@@ -19,19 +19,21 @@ delta_t = 1
 num_sources = 5
 
 # Ask for the adjacency matrix
-graph_filename = askopenfilename(
-    filetypes=[("CSV", "*.csv")],
-    title="Open graph",
-)
+# graph_filename = askopenfilename(
+#     filetypes=[("CSV", "*.csv")],
+#     title="Open graph",
+# )
 # graph_filename = "C:/Users/larsv/OneDrive/Documenten/TU Delft/Vakken/Modelling 2b (AM2050-B)/Modelling-2B/tmp/Graphs/random_geometric_adjacency_matrix.csv"
+graph_filename = "C:/Users/larsv/OneDrive/Documenten/TU Delft/Vakken/Modelling 2b (AM2050-B)/Modelling-2B/tmp/Graphs/1500_random_adjacency_matrix.csv"
 adjacency_matrix = open_adjacency_matrix(graph_filename)
 
 # Ask for the scores
-scores_filename = askopenfilename(
-    filetypes=[("CSV", "*.csv")],
-    title="Open scores",
-)
+# scores_filename = askopenfilename(
+#     filetypes=[("CSV", "*.csv")],
+#     title="Open scores",
+# )
 # scores_filename = "C:/Users/larsv/OneDrive/Documenten/TU Delft/Vakken/Modelling 2b (AM2050-B)/Modelling-2B/tmp/Graphs/150_wappie_scores.csv"
+scores_filename = "C:/Users/larsv/OneDrive/Documenten/TU Delft/Vakken/Modelling 2b (AM2050-B)/Modelling-2B/tmp/Graphs/1500_wappie_scores.csv"
 scores = open_node_information_array(scores_filename)
 
 # Generate the graph
@@ -39,7 +41,7 @@ graph = generate_graph_from_adjecency_and_scores(adjacency_matrix, scores)
 
 # Set the data collector
 location = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "tmp", "V3", "data"
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "tmp", "V3", "1500_0.04"
 )
 data_collector = DataCollector(location=location)
 
@@ -64,7 +66,7 @@ with data_collector as data_collector:
     # Plot the graph
     print("Plotting graph")
     print(f"Day {data_collector.time}")
-    graph.plot()
+    # graph.plot()
 
     # Iterate over the days
     print("Iterating over the days")
@@ -75,5 +77,5 @@ with data_collector as data_collector:
             # Update the account
             account.use(graph.nodes)
         print(f"Day {data_collector.time}")
-        graph.plot()
+        # graph.plot()
     fake_news.add_empty_row()

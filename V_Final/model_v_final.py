@@ -15,9 +15,11 @@ from graph_utils.open_scores import open_node_information_array
 # Setup the simulation time
 days = 200
 delta_t = 1
+sigma = 0.4
 
 # Define the number of nodes that will be the source of the fake news
-num_sources = 500
+num_sources = 600
+step_size = 10
 
 # Ask for the adjacency matrix
 graph_filename = askopenfilename(
@@ -39,36 +41,46 @@ print("Opening scores")
 scores = open_node_information_array(scores_filename)
 print("Scores opened")
 
-sources = None
+# Choose the sources
+print("Choosing sources")
+if num_sources > len(adjacency_matrix):
+    raise ValueError("The number of sources cannot be larger than the number of nodes in the graph")
+output_file = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+    "tmp",
+    "VFinal",
+    f"{len(adjacency_matrix)}",
+    f"{num_sources}_sources.csv",
+)
+if os.path.exists(output_file):
+    sources = np.loadtxt(output_file)
+else:
+    sources = np.random.choice(list(range(len(adjacency_matrix))), size=num_sources, replace=False)
+os.makedirs(os.path.dirname(output_file), exist_ok=True)
+np.savetxt(output_file, sources, fmt="%f")
 
-for sigma in [
-    0.1,
-    0.125,
-    0.15,
-    0.175,
-    0.2,
-    0.225,
-    0.25,
-    0.275,
-    0.3,
-    0.325,
-    0.35,
-    0.375,
-    0.4,
-    0.425,
-    0.45,
-    0.475,
-    0.5,
-]:
-    graph = None
+steps = int(num_sources / step_size)
 
-    # Generate the graph
-    print("Generating graph")
-    graph = generate_graph_from_adjecency_and_scores(adjacency_matrix, scores)
+if steps == 0:
+    steps = 1
+
+# Generate the graph
+print("Generating graph")
+graph = generate_graph_from_adjecency_and_scores(adjacency_matrix, scores)
+
+
+for step in reversed(range(steps)):
+    print(f"Step {step + 1}/{steps}")
+    graph.reset()
+    sources_selected = sources[: (step + 1) * step_size]
 
     # Set the data collector
     location = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "tmp", "V4", f"15000_{sigma}"
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+        "tmp",
+        "VFinal",
+        f"{len(adjacency_matrix)}",
+        f"{len(sources_selected)}",
     )
     data_collector = DataCollector(location=location)
 
@@ -84,67 +96,12 @@ for sigma in [
         # Generate the fake news
         print("Generating fake news")
         fake_news = News(datacollector=data_collector)
+        fake_news.id = 0
 
-        # Choose the sources
-        print("Choosing sources")
-        if sources is None:
-            sources = np.random.choice(list(graph.nodes), size=num_sources, replace=False)
-        # # sources = [
-        #     304,
-        #     633,
-        #     909,
-        #     1313,
-        #     950,
-        #     596,
-        #     691,
-        #     871,
-        #     827,
-        #     283,
-        #     132,
-        #     336,
-        #     1062,
-        #     967,
-        #     949,
-        #     603,
-        #     1478,
-        #     1483,
-        #     812,
-        #     1236,
-        #     1026,
-        #     91,
-        #     1446,
-        #     1499,
-        #     1001,
-        #     1401,
-        #     195,
-        #     546,
-        #     386,
-        #     891,
-        #     1150,
-        #     53,
-        #     128,
-        #     593,
-        #     614,
-        #     407,
-        #     300,
-        #     881,
-        #     1268,
-        #     634,
-        #     1339,
-        #     672,
-        #     560,
-        #     876,
-        #     720,
-        #     217,
-        #     219,
-        #     6,
-        #     1393,
-        #     1442,
-        # ]
-        graph.sources = sources
+        graph.sources = sources_selected
 
         # Change the scores of the sources and add the fake news
-        for source in sources:
+        for source in sources_selected:
             graph.nodes[source].change_to_source()
             graph.nodes[source].received_news.append((graph.nodes[source], fake_news))
 
@@ -178,6 +135,6 @@ for sigma in [
                 graph.plot()
             fake_news.add_empty_row()
         fake_news.add_empty_row()
-        if "news_reached" in data_collector.data:
-            for datapoint in data_collector.data["news_reached"]:
-                print(datapoint)
+        # if "news_reached" in data_collector.data:
+        #     for datapoint in data_collector.data["news_reached"]:
+        #         print(datapoint)

@@ -381,7 +381,7 @@ def plot_news_reached_3(
     plt.ylabel("Cumulative number of accounts reached (%)")
     plt.ylim(0, 1.01)
     plt.grid()
-    plt.legend(loc="center right")
+    plt.legend()
 
     if graph_filename:
         plt.savefig(
@@ -396,65 +396,57 @@ def plot_news_reached_3(
 
 
 if __name__ == "__main__":
-    # old = True
-    # news_reached_filename = askopenfilename(
-    #     filetypes=[("CSV", "*.csv")],
-    #     title="Open news reached file",
-    # )
-    # graph_filename = asksaveasfilename(
-    #     filetypes=[("PNG", "*.png")],
-    #     title="Save graph",
-    #     defaultextension=".png",
-    #     initialfile="news_reached_graph.png",
-    # )
-    # model_name = askstring(
-    #     "Model name",
-    #     "What is the name of the model?",
-    #     initialvalue="Model",
-    # )
-    # simulation_data = get_simulation_data(os.path.dirname(news_reached_filename))
-
-    version = "V4"
-    pop = 15000
-    betas = [
-        0.1,
-        0.3,
-        0.35,
-        0.375,
-        0.4,
-        0.45,
-        0.5,
-    ]
-
-    version_pop_betas = []
-    for beta in betas:
-        version_pop_betas.append(
-            f"C:/Users/larsv/OneDrive/Documenten/TU Delft/Vakken/Modelling 2b (AM2050-B)/Modelling-2B/tmp/{version}/{pop}_{beta}/news_reached.csv"
-        )
-
-    version_pop_data = []
-    for version_pop_beta in version_pop_betas:
-        version_pop_data.append(get_simulation_data(os.path.dirname(version_pop_beta)))
-
-    version_pop_names = []
-    for beta in betas:
-        version_pop_names.append(f"Model {version} ({beta})")
-
-    graph_filename = f"C:/Users/larsv/OneDrive/Documenten/TU Delft/Vakken/Modelling 2b (AM2050-B)/Modelling-2B/tmp/{version}/{pop}/news_reached_graph.png"
-
-    V2_pop = f"C:/Users/larsv/OneDrive/Documenten/TU Delft/Vakken/Modelling 2b (AM2050-B)/Modelling-2B/tmp/V2/{pop}/news_reached.csv"
-    V2_pop_data = get_simulation_data(os.path.dirname(V2_pop))
-    V2_pop_model_name = "Model V2"
-
-    plot_news_reached_3(
-        csv_filenames=version_pop_betas,
-        csv_filename_old=V2_pop,
-        graph_filename=graph_filename,
-        simulation_data=version_pop_data,
-        simulation_data_old=V2_pop_data,
-        model_names=version_pop_names,
-        model_name_old=V2_pop_model_name,
+    old = False
+    news_reached_filename = askopenfilename(
+        filetypes=[("CSV", "*.csv")],
+        title="Open news reached file",
     )
+    graph_filename = asksaveasfilename(
+        filetypes=[("PNG", "*.png")],
+        title="Save graph",
+        defaultextension=".png",
+        initialfile="news_reached_graph.png",
+    )
+    model_name = askstring(
+        "Model name",
+        "What is the name of the model?",
+        initialvalue="Model",
+    )
+    simulation_data = get_simulation_data(os.path.dirname(news_reached_filename))
+
+    # version = "V3"
+    # pop = 1500
+    # betas = [0.1, 0.08, 0.05, 0.04]
+
+    # version_pop_betas = []
+    # for beta in betas:
+    #     version_pop_betas.append(
+    #         f"C:/Users/larsv/OneDrive/Documenten/TU Delft/Vakken/Modelling 2b (AM2050-B)/Modelling-2B/tmp/{version}/{pop}_{beta}/news_reached.csv"
+    #     )
+
+    # version_pop_data = []
+    # for version_pop_beta in version_pop_betas:
+    #     version_pop_data.append(get_simulation_data(os.path.dirname(version_pop_beta)))
+
+    # version_pop_names = []
+    # for beta in betas:
+    #     version_pop_names.append(f"Model {version} ({beta})")
+
+    # graph_filename = f"C:/Users/larsv/OneDrive/Documenten/TU Delft/Vakken/Modelling 2b (AM2050-B)/Modelling-2B/tmp/{version}/{pop}/news_reached_graph.png"
+
+    # V2_pop = f"C:/Users/larsv/OneDrive/Documenten/TU Delft/Vakken/Modelling 2b (AM2050-B)/Modelling-2B/tmp/V2/{pop}/news_reached.csv"
+    # V2_pop_data = get_simulation_data(os.path.dirname(V2_pop))
+    # V2_pop_model_name = "Model V2"
+
+    # plot_news_reached_3(
+    #     csv_filenames=version_pop_betas,
+    #     csv_filename_old=V2_pop,
+    #     graph_filename=graph_filename,
+    #     simulation_data=version_pop_data,
+    #     simulation_data_old=V2_pop_data,
+    #     model_names=version_pop_names,
+    #     model_name_old=V2_pop_model_name,
+    # )
 
     # plot_news_reached_3(
     #     csv_filenames: list[str],
@@ -466,27 +458,28 @@ if __name__ == "__main__":
     #     model_name_old: str = "Previous model",
     # )
 
-    # if old:
-    #     news_reached_filename_2 = askopenfilename(
-    #         filetypes=[("CSV", "*.csv")],
-    #         title="Open news reached file",
-    #     )
-    #     simulation_data_2 = get_simulation_data(os.path.dirname(news_reached_filename_2))
-    #     model_name_2 = askstring(
-    #         "Model name",
-    #         "What is the name of the model?",
-    #         initialvalue="Previous model",
-    #     )
-    #     plot_news_reached_2(
-    #         news_reached_filename,
-    #         news_reached_filename_2,
-    #         graph_filename,
-    #         simulation_data,
-    #         simulation_data_2,
-    #     )
-    # else:
-    #     plot_news_reached(
-    #         news_reached_filename,
-    #         graph_filename,
-    #         simulation_data,
-    #     )
+    if old:
+        news_reached_filename_2 = askopenfilename(
+            filetypes=[("CSV", "*.csv")],
+            title="Open news reached file",
+        )
+        simulation_data_2 = get_simulation_data(os.path.dirname(news_reached_filename_2))
+        model_name_2 = askstring(
+            "Model name",
+            "What is the name of the model?",
+            initialvalue="Previous model",
+        )
+        plot_news_reached_2(
+            news_reached_filename,
+            news_reached_filename_2,
+            graph_filename,
+            simulation_data,
+            simulation_data_2,
+        )
+    else:
+        plot_news_reached(
+            news_reached_filename,
+            graph_filename,
+            simulation_data,
+            model_name,
+        )

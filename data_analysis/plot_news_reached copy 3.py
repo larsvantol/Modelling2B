@@ -76,7 +76,6 @@ def plot_news_reached(
     plt.xlim(0, time[-1])
     plt.ylabel("Accounts reached")
     plt.ylim(0, simulation_data["population"])
-    plt.legend()
     plt.grid()
     if graph_filename:
         plt.savefig(
@@ -105,7 +104,7 @@ def plot_news_reached(
     plt.ylabel("Accounts reached (%)")
     plt.ylim(0, 1)
     plt.grid()
-    plt.legend()
+    # plt.legend()
     if graph_filename:
         plt.savefig(
             f"{graph_filename}_percentage.png",
@@ -132,7 +131,7 @@ def plot_news_reached(
     plt.ylabel("Cumulative number of accounts reached (%)")
     plt.ylim(0, 1)
     plt.grid()
-    plt.legend()
+    # plt.legend()
 
     if graph_filename:
         plt.savefig(
@@ -175,7 +174,7 @@ def plot_news_reached_2(
     plt.xlim(0, max(time[-1], time_2[-1]))
     plt.ylabel("Accounts reached")
     plt.ylim(0, max(simulation_data["population"], simulation_data_2["population"]))
-    plt.legend()
+    # plt.legend()
     plt.grid()
     if graph_filename:
         plt.savefig(
@@ -211,7 +210,7 @@ def plot_news_reached_2(
     plt.ylabel("Accounts reached (%)")
     plt.ylim(0, 1)
     plt.grid()
-    plt.legend()
+    # plt.legend()
     if graph_filename:
         plt.savefig(
             f"{graph_filename}_percentage_with_old.png",
@@ -244,7 +243,7 @@ def plot_news_reached_2(
     plt.ylabel("Cumulative number of accounts reached (%)")
     plt.ylim(0, 1.01)
     plt.grid()
-    plt.legend()
+    # plt.legend()
 
     if graph_filename:
         plt.savefig(
@@ -260,12 +259,10 @@ def plot_news_reached_2(
 
 def plot_news_reached_3(
     csv_filenames: list[str],
-    csv_filename_old: str,
     graph_filename: str,
     simulation_data: list[str],
-    simulation_data_old: str,
     model_names: list[str],
-    model_name_old: str = "Previous model",
+    legend: bool = True,
 ):
     # Remove the extension of the graph_filename
     if graph_filename:
@@ -287,149 +284,200 @@ def plot_news_reached_3(
         }
         max_population = max(max_population, int(single_simulation_data["population"]))
         max_time = max(max_time, time[-1])
-    time_2, news_ids_2, news_reached_per_id_2 = parse_data(csv_filename_old)
-    max_population = max(max_population, int(simulation_data_old["population"]))
-    max_time = max(max_time, time_2[-1])
 
-    # Plot the data
+    # # Plot the data
+    # plt.figure()
+    # for model in data:
+    #     time = data[model]["time"]
+    #     news_reached_per_id = data[model]["news_reached_per_id"]
+    #     for news_id in news_ids:
+    #         plt.plot(time, news_reached_per_id[news_id], label=f"{model}")
+
+    # # Set the axis
+    # plt.xlabel("Time")
+    # plt.xlim(0, max_time)
+    # plt.ylabel("Accounts reached")
+    # plt.ylim(0, max_population)
+    # if legend:
+    #     plt.legend()
+    # plt.grid()
+    # if graph_filename:
+    #     plt.savefig(
+    #         f"{graph_filename}_absolute_with_old.png",
+    #         dpi=300,
+    #         format="png",
+    #         bbox_inches="tight",
+    #         transparent=False,
+    #     )
+    # else:
+    #     plt.show()
+
+    # # Now for the percentage of accounts reached
+    # plt.figure()
+    # for model in data:
+    #     total_accounts = int(data[model]["simulation_data"]["population"])
+    #     time = data[model]["time"]
+    #     news_reached_per_id = data[model]["news_reached_per_id"]
+    #     for news_id in news_ids:
+    #         plt.plot(
+    #             time,
+    #             np.array(news_reached_per_id[news_id]) / total_accounts,
+    #             label=f"{model}",
+    #         )
+
+    # # Set the axis
+    # plt.xlabel("Time")
+    # plt.xlim(0, max_time)
+    # plt.ylabel("Accounts reached (%)")
+    # plt.ylim(0, 1)
+    # plt.grid()
+    # if legend:
+    #     plt.legend()
+    # if graph_filename:
+    #     plt.savefig(
+    #         f"{graph_filename}_percentage_with_old.png",
+    #         dpi=300,
+    #         format="png",
+    #         bbox_inches="tight",
+    #         transparent=False,
+    #     )
+    # else:
+    #     plt.show()
+
+    # # Now for the cummulative number of accounts reached
+    # plt.figure()
+    # for model in data:
+    #     total_accounts = int(data[model]["simulation_data"]["population"])
+    #     time = data[model]["time"]
+    #     news_reached_per_id = data[model]["news_reached_per_id"]
+    #     for news_id in news_ids:
+    #         plt.plot(
+    #             time,
+    #             np.cumsum(news_reached_per_id[news_id]) / total_accounts,
+    #             label=f"{model}",
+    #         )
+
+    # # Set the axis
+    # plt.xlabel("Time")
+    # plt.xlim(0, max_time)
+    # plt.ylabel("Cumulative number of accounts reached (%)")
+    # plt.ylim(0, 1.01)
+    # plt.grid()
+    # if legend:
+    #     plt.legend(loc="center right")
+
+    # if graph_filename:
+    #     plt.savefig(
+    #         f"{graph_filename}_cumulative_with_old.png",
+    #         dpi=300,
+    #         format="png",
+    #         bbox_inches="tight",
+    #         transparent=False,
+    #     )
+    # else:
+    #     plt.show()
+
+    # Now x axis the number of accounts that have sent the news and y axis the number of accounts reached
     plt.figure()
+    x = []
+    y = []
     for model in data:
-        time = data[model]["time"]
+        total_accounts = int(data[model]["simulation_data"]["population"])
         news_reached_per_id = data[model]["news_reached_per_id"]
         for news_id in news_ids:
-            plt.plot(time, news_reached_per_id[news_id], label=f"{model}")
-    plt.plot(time_2, news_reached_per_id_2[news_id], label=f"{model_name_old}", color="silver")
+            x.append(int(model.split("(")[-1].split(")")[0]))
+            y.append(int(sum(news_reached_per_id[news_id])))
+    plt.plot(x, y, label=f"Final model")
 
     # Set the axis
-    plt.xlabel("Time")
-    plt.xlim(0, max_time)
-    plt.ylabel("Accounts reached")
+    plt.xlabel("Number of fake accounts")
+    plt.xlim(0, 400)
+    plt.ylabel("Number of accounts reached")
     plt.ylim(0, max_population)
-    plt.legend()
     plt.grid()
+    if legend:
+        plt.legend()
+
     if graph_filename:
         plt.savefig(
-            f"{graph_filename}_absolute_with_old.png",
+            f"{graph_filename}_totals.png",
             dpi=300,
             format="png",
             bbox_inches="tight",
             transparent=False,
         )
-    else:
-        plt.show()
-
-    # Now for the percentage of accounts reached
-    plt.figure()
-    for model in data:
-        total_accounts = int(data[model]["simulation_data"]["population"])
-        time = data[model]["time"]
-        news_reached_per_id = data[model]["news_reached_per_id"]
-        for news_id in news_ids:
-            plt.plot(
-                time,
-                np.array(news_reached_per_id[news_id]) / total_accounts,
-                label=f"{model}",
-            )
-    total_accounts_2 = int(simulation_data_old["population"])
-    plt.plot(
-        time_2,
-        np.array(news_reached_per_id_2[news_id]) / total_accounts_2,
-        label=f"{model_name_old}",
-        color="silver",
-    )
-
-    # Set the axis
-    plt.xlabel("Time")
-    plt.xlim(0, max_time)
-    plt.ylabel("Accounts reached (%)")
-    plt.ylim(0, 1)
-    plt.grid()
-    plt.legend()
-    if graph_filename:
-        plt.savefig(
-            f"{graph_filename}_percentage_with_old.png",
-            dpi=300,
-            format="png",
-            bbox_inches="tight",
-            transparent=False,
-        )
-    else:
-        plt.show()
-
-    # Now for the cummulative number of accounts reached
-    plt.figure()
-    for model in data:
-        total_accounts = int(data[model]["simulation_data"]["population"])
-        time = data[model]["time"]
-        news_reached_per_id = data[model]["news_reached_per_id"]
-        for news_id in news_ids:
-            plt.plot(
-                time,
-                np.cumsum(news_reached_per_id[news_id]) / total_accounts,
-                label=f"{model}",
-            )
-    plt.plot(
-        time_2,
-        np.cumsum(news_reached_per_id_2[news_id]) / total_accounts_2,
-        label=f"{model_name_old}",
-        color="silver",
-    )
-
-    # Set the axis
-    plt.xlabel("Time")
-    plt.xlim(0, max_time)
-    plt.ylabel("Cumulative number of accounts reached (%)")
-    plt.ylim(0, 1.01)
-    plt.grid()
-    plt.legend(loc="center right")
-
-    if graph_filename:
-        plt.savefig(
-            f"{graph_filename}_cumulative_with_old.png",
-            dpi=300,
-            format="png",
-            bbox_inches="tight",
-            transparent=False,
-        )
-    else:
-        plt.show()
 
 
 if __name__ == "__main__":
-    # old = True
-    # news_reached_filename = askopenfilename(
-    #     filetypes=[("CSV", "*.csv")],
-    #     title="Open news reached file",
-    # )
-    # graph_filename = asksaveasfilename(
-    #     filetypes=[("PNG", "*.png")],
-    #     title="Save graph",
-    #     defaultextension=".png",
-    #     initialfile="news_reached_graph.png",
-    # )
-    # model_name = askstring(
-    #     "Model name",
-    #     "What is the name of the model?",
-    #     initialvalue="Model",
-    # )
-    # simulation_data = get_simulation_data(os.path.dirname(news_reached_filename))
-
-    version = "V4"
-    pop = 15000
-    betas = [
-        0.1,
-        0.3,
-        0.35,
-        0.375,
-        0.4,
-        0.45,
-        0.5,
+    version = "VFinal"
+    pop = 40000
+    accounts = [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100,
+        110,
+        120,
+        130,
+        140,
+        150,
+        160,
+        170,
+        180,
+        190,
+        200,
+        210,
+        220,
+        230,
+        240,
+        250,
+        260,
+        270,
+        280,
+        290,
+        300,
+        310,
+        320,
+        330,
+        340,
+        350,
+        360,
+        370,
+        380,
+        390,
+        400,
+        410,
+        420,
+        430,
+        440,
+        450,
+        460,
+        470,
+        480,
+        490,
+        500,
+        510,
+        520,
+        530,
+        540,
+        550,
+        560,
+        570,
+        580,
+        590,
+        600,
     ]
 
     version_pop_betas = []
-    for beta in betas:
+    for num_accouts in accounts:
         version_pop_betas.append(
-            f"C:/Users/larsv/OneDrive/Documenten/TU Delft/Vakken/Modelling 2b (AM2050-B)/Modelling-2B/tmp/{version}/{pop}_{beta}/news_reached.csv"
+            f"C:/Users/larsv/OneDrive/Documenten/TU Delft/Vakken/Modelling 2b (AM2050-B)/Modelling-2B/tmp/{version}/{pop}/{num_accouts}/news_reached.csv"
         )
 
     version_pop_data = []
@@ -437,56 +485,14 @@ if __name__ == "__main__":
         version_pop_data.append(get_simulation_data(os.path.dirname(version_pop_beta)))
 
     version_pop_names = []
-    for beta in betas:
-        version_pop_names.append(f"Model {version} ({beta})")
+    for num_accouts in accounts:
+        version_pop_names.append(f"Model {version} ({num_accouts})")
 
     graph_filename = f"C:/Users/larsv/OneDrive/Documenten/TU Delft/Vakken/Modelling 2b (AM2050-B)/Modelling-2B/tmp/{version}/{pop}/news_reached_graph.png"
 
-    V2_pop = f"C:/Users/larsv/OneDrive/Documenten/TU Delft/Vakken/Modelling 2b (AM2050-B)/Modelling-2B/tmp/V2/{pop}/news_reached.csv"
-    V2_pop_data = get_simulation_data(os.path.dirname(V2_pop))
-    V2_pop_model_name = "Model V2"
-
     plot_news_reached_3(
         csv_filenames=version_pop_betas,
-        csv_filename_old=V2_pop,
         graph_filename=graph_filename,
         simulation_data=version_pop_data,
-        simulation_data_old=V2_pop_data,
         model_names=version_pop_names,
-        model_name_old=V2_pop_model_name,
     )
-
-    # plot_news_reached_3(
-    #     csv_filenames: list[str],
-    #     csv_filename_old: str,
-    #     graph_filename: str,
-    #     simulation_data: list[str],
-    #     simulation_data_old: str,
-    #     model_names: list[str],
-    #     model_name_old: str = "Previous model",
-    # )
-
-    # if old:
-    #     news_reached_filename_2 = askopenfilename(
-    #         filetypes=[("CSV", "*.csv")],
-    #         title="Open news reached file",
-    #     )
-    #     simulation_data_2 = get_simulation_data(os.path.dirname(news_reached_filename_2))
-    #     model_name_2 = askstring(
-    #         "Model name",
-    #         "What is the name of the model?",
-    #         initialvalue="Previous model",
-    #     )
-    #     plot_news_reached_2(
-    #         news_reached_filename,
-    #         news_reached_filename_2,
-    #         graph_filename,
-    #         simulation_data,
-    #         simulation_data_2,
-    #     )
-    # else:
-    #     plot_news_reached(
-    #         news_reached_filename,
-    #         graph_filename,
-    #         simulation_data,
-    #     )
